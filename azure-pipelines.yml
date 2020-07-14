@@ -21,7 +21,7 @@ steps:
   displayName: 'npm install'
 
 - script: |
-    cd android
+    cd src/android
     bundle install
     fastlane build
   displayName: 'Build android'
