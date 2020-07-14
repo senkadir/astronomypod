@@ -44,6 +44,16 @@ steps:
 - script: mv src/android/app/build/outputs/apk/release/app-release.apk src/android/app/build/outputs/apk/release/com.senkadir.$(Build.BuildNumber).apk
   displayName: 'Rename apk'
 
+- task: AppCenterDistribute@2
+  displayName: 'Deploy com.senkadir.$(Build.BuildNumber).apk to Visual Studio App Center'
+  inputs:
+    serverEndpoint: 'astronomypod.appcenter.android'
+    appSlug: '$(appSlug)'
+    appFile: 'src/android/app/build/outputs/apk/release/com.senkadir.$(Build.BuildNumber).apk'
+    symbolsIncludeParentDirectory: false
+    releaseNotesInput: 'Initial create'
+  condition: succeededOrFailed()
+
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: 'src/android/app/build/outputs/apk/release/com.senkadir.$(Build.BuildNumber).apk'
