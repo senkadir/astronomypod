@@ -9,19 +9,43 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  - group: droid-variables
+
 steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- script: |
-    cd src
-    npm install
-  displayName: 'npm install'
+- script: npm install
+  workingDirectory: src
+  displayName: 'Install node dependencies'
 
-- script: |
-    cd src/android
-    bundle install
-    fastlane build
-  displayName: 'Build android'
+- task: Gradle@2
+  inputs:
+    workingDirectory: 'src/android'
+    gradleWrapperFile: 'src/android/gradlew'
+    gradleOptions: '-Xmx3072m'
+    publishJUnitResults: false
+    testResultsFiles: '**/TEST-*.xml'
+    tasks: 'assembleRelease'
+  
+- task: AndroidSigning@2
+  inputs:
+    apkFiles: '**/*.apk'
+    jarsign: true
+    jarsignerKeystoreFile: 'debug.keystore'
+    jarsignerKeystorePassword: '$(jarsignerKeystorePassword)'
+    jarsignerKeystoreAlias: 'react-native-pipeline-key'
+    jarsignerKeyPassword: '$(jarsignerKeyPassword)'
+    zipalign: true  
+
+- script: mv src/android/app/build/outputs/apk/release/app-release-unsigned.apk ReactNativePipeline$(Build.BuildNumber).apk
+  displayName: 'Rename apk'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: ReactNativePipeline$(Build.BuildNumber).apk
+    artifactName: drop
+    publishLocation: 'container'
