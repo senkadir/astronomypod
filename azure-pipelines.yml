@@ -31,15 +31,15 @@ steps:
     testResultsFiles: '**/TEST-*.xml'
     tasks: 'assembleRelease'
   
-- task: AndroidSigning@2
+- task: AndroidSigning@3
+  displayName: 'Signing APK'
   inputs:
     apkFiles: '**/*.apk'
-    jarsign: true
-    jarsignerKeystoreFile: 'debug.keystore'
-    jarsignerKeystorePassword: '$(jarsignerKeystorePassword)'
-    jarsignerKeystoreAlias: 'react-native-pipeline-key'
-    jarsignerKeyPassword: '$(jarsignerKeyPassword)'
-    zipalign: true  
+    apksign: true
+    apksignerKeystoreFile: 'debug.keystore'
+    apksignerKeystorePassword: '$(jarsignerKeystorePassword)'
+    apksignerKeystoreAlias: 'react-native-pipeline-key'
+    apksignerKeyPassword: '$(jarsignerKeyPassword)'
 
 - script: mv src/android/app/build/outputs/apk/release/app-release-unsigned.apk ReactNativePipeline$(Build.BuildNumber).apk
   displayName: 'Rename apk'
