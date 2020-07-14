@@ -41,11 +41,8 @@ steps:
     apksignerKeystoreAlias: 'react-native-pipeline-key'
     apksignerKeyPassword: '$(jarsignerKeyPassword)'
 
-- script: mv src/android/app/build/outputs/apk/release/app-release-unsigned.apk ReactNativePipeline$(Build.BuildNumber).apk
-  displayName: 'Rename apk'
-
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: ReactNativePipeline$(Build.BuildNumber).apk
+    pathtoPublish: $(Build.BuildNumber).apk
     artifactName: drop
     publishLocation: 'container'
