@@ -18,5 +18,10 @@ steps:
 - script: |
     cd src
     npm install
-    npm run build
-  displayName: 'npm install and build'
+  displayName: 'npm install'
+
+- script: |
+    cd android
+    bundle install
+    fastlane build
+  displayName: 'Build android'
