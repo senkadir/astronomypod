@@ -41,6 +41,9 @@ steps:
     apksignerKeystoreAlias: 'react-native-pipeline-key'
     apksignerKeyPassword: '$(jarsignerKeyPassword)'
 
+- script: mv src/android/app/build/outputs/apk/release/com.senkadir.$(Build.BuildNumber).apk
+  displayName: 'Rename apk'
+
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: 'src/android/app/build/outputs/apk/release/com.senkadir.$(Build.BuildNumber).apk'
