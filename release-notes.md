@@ -1,3 +1,3 @@
-# astronomypod release notes
+# astronomypod 
 
-Release notes added to file
+View Image details was added.
